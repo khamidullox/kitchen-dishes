@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 import { useEffect } from "react";
+import { GlobalLoading, showLoading } from "react-global-loading";
 export let action = async ({ request }) => {
   let formData = await request.formData();
   let name = formData.get("name");
@@ -21,9 +22,13 @@ export let action = async ({ request }) => {
 function Crerate() {
   let navigate = useNavigate();
   let actionData = useActionData();
+  const show = () => {
+    showLoading(true);
+  };
   useEffect(() => {
     if (actionData) {
       navigate("/");
+      showLoading(false);
     } else {
     }
   }, [actionData]);
@@ -44,7 +49,10 @@ function Crerate() {
             className="textarea textarea-bordered textarea-sm  max-w-xs w-full"
           ></textarea>
         </label>
-        <button className="btn btn-accent mb-5 w-80  ">Submit</button>
+        <button onClick={show} className="btn btn-accent mb-5 w-80  ">
+          Submit
+        </button>
+        <GlobalLoading />
       </Form>
     </div>
   );
